@@ -1,0 +1,11 @@
+FTP Server: ftp.tupiza.com
+FTP User:myUbiApp@tupiza.com
+FTP Pass:ubiApp!2016
+Database: myUbiApp
+Database IP: localhost
+Database User:myUbiApp
+Database Pass:ubiApp
+Database Client
+http://tupiza.com/ubiapp/phpMyAdmin/
+Php link
+http://tupiza.com/myUbiApp/mySqlExample/login.php

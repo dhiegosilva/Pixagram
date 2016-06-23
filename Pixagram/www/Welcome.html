@@ -1,0 +1,162 @@
+
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Capture Photo</title>
+   
+         
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/UIPROJECT.min.css" />
+    <link rel="stylesheet" href="css/UIPROJECT.css" />
+    <script type="text/javascript" src="js/jquery.js"></script>
+
+
+
+    <script type="text/javascript" charset="utf-8">
+
+    var pictureSource;   // picture source
+    var destinationType; // sets the format of returned value 
+
+    // Wait for PhoneGap to connect with the device
+    //
+    document.addEventListener("deviceready",onDeviceReady,false);
+
+    // PhoneGap is ready to be used!
+    //
+    function onDeviceReady() {
+        pictureSource=navigator.camera.PictureSourceType;
+        destinationType=navigator.camera.DestinationType;
+    }
+
+    // Called when a photo is successfully retrieved
+    //
+    function onPhotoDataSuccess(imageData) {
+      // Uncomment to view the base64 encoded image data
+      // console.log(imageData);
+
+      // Get image handle
+      //
+      var smallImage = document.getElementById('smallImage');
+
+      // Unhide image elements
+      //
+      smallImage.style.display = 'block';
+
+      // Show the captured photo
+      // The inline CSS rules are used to resize the image
+      //
+      smallImage.src = "data:image/jpeg;base64," + imageData;
+	  
+	  var small = document.getElementById('comment');
+      small.style.display = 'block';
+      
+    }
+
+    // Called when a photo is successfully retrieved
+    //
+    function onPhotoURISuccess(imageURI) {
+      // Uncomment to view the image file URI 
+      // console.log(imageURI);
+
+      // Get image handle
+      //
+      var largeImage = document.getElementById('largeImage');
+
+      // Unhide image elements
+      //
+      largeImage.style.display = 'block';
+
+      // Show the captured photo
+      // The inline CSS rules are used to resize the image
+      //
+      largeImage.src = imageURI;
+	  var large = document.getElementById('comment1');
+      large.style.display = 'block';
+    }
+
+    // A button will call this function
+    //
+    function capturePhoto() {
+      // Take picture using device camera and retrieve image as base64-encoded string
+      navigator.camera.getPicture(onPhotoDataSuccess, onFail, { quality: 25, destinationType: Camera.DestinationType.DATA_URL  });
+      
+      
+      var ab= smallImage.src.split("?");
+      var user= ab[1];
+      var path= user+"image1";
+      var dataString="user="+user+"&path="+path;
+      //alert(dataString);
+      if($.trim(user).length>0 & $.trim(path).length>0)
+       {
+      $.ajax({
+             type: "POST",
+             url:"http://tupiza.com/myUbiApp/Gaurav/insertimage.php",
+             data: dataString, 
+             crossDomain: true,
+             cache: false,
+             success: function(data){
+                 if(data=="Success"){
+                    alert("Image insert successfully");
+                 }
+                 else if(data=="Wrong"){
+                    alert("Fail to Insert");
+                 }
+             }
+         });
+      }return false;
+    }
+
+    // A button will call this function
+    //
+    function capturePhotoEdit() {
+      // Take picture using device camera, allow edit, and retrieve image as base64-encoded string  
+      navigator.camera.getPicture(onPhotoDataSuccess, onFail, { quality: 20, allowEdit: true }); 
+    }
+
+    // A button will call this function
+    //
+    function getPhoto(source) {
+      // Retrieve image file location from specified source
+      navigator.camera.getPicture(onPhotoURISuccess, onFail, { quality: 50, 
+        destinationType: destinationType.FILE_URI,
+        sourceType: source });
+    }
+
+    // Called if something bad happens.
+    // 
+    function onFail(message) {
+      alert('Failed because: ' + message);
+    }
+    
+    </script>
+  </head>
+  <body>
+   <div><h1>PIX@GR@M</h1></div>
+   <div>
+        <p> Hello <input type="text" id="username" readonly /></p>
+    </div>
+   <div align="right"><a href="index.html"> Log out</a></div>
+    <button onclick="capturePhoto();">Capture Photo</button> <br>
+    <button onclick="capturePhotoEdit();">Capture Editable Photo</button> <br>
+    <button onclick="getPhoto(pictureSource.PHOTOLIBRARY);">From Photo Library</button><br>
+    <button onclick="getPhoto(pictureSource.SAVEDPHOTOALBUM);">From Photo Album</button><br>
+    <img style="display:none;" width=300 id="smallImage" src="" />
+    <input type="text" id="comment" placeholder="something about photo......." style="display:none;"/>
+    <img style="display:none;" width=300 id="largeImage" src="" />
+	 <input type="text" id="comment1" placeholder="something about photo......." style="display:none;"/>
+  <script type="text/javascript" src="cordova.js"></script>
+  
+  </body>
+
+<script type="text/javascript">
+      var ab= window.location.search; 
+      var abc= ab.split("?");
+      document.getElementById("username").value= abc[1];
+        
+</script>
+   
+
+
+</html>

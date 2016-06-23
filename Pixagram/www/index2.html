@@ -1,0 +1,74 @@
+
+<html>
+<head>
+     <meta charset="UTF-8">
+    <title>Registration</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/UIPROJECT.min.css" />
+    <link rel="stylesheet" href="css/UIPROJECT.css" />
+    
+ <script type="text/javascript" src="js/jquery.js"></script>
+ <script type="text/javascript">
+ $(document).ready(function()
+ {
+     $("#Signin").click(function(){
+     var user=$("#user").val();
+     var password=$("#password").val();
+     var dataString="user="+user+"&pass="+password;
+     if($.trim(user).length>0 & $.trim(password).length>0)
+     {
+         //alert(dataString);
+         $.ajax({
+             type: "POST",
+             url:"http://tupiza.com/myUbiApp/Gaurav/insert.php",
+             data: dataString, 
+             crossDomain: true,
+             cache: false,
+             beforeSend: function(){ $("#Signin").val('Connecting...');},
+             success: function(data){
+                 if(data=="Success"){
+                    window.location.href = "index.html";
+                 }
+                 else if(data=="Wrong"){
+                    alert("Wrong UserId or Password");
+                    $("#Signin").val('Sign In again');
+                 }
+             }
+         });
+    }return false;
+ });
+ });
+ </script>
+</head>
+<style>
+      body{
+          background:url("1.jpg");
+            background-size: 2500px 1100px;
+            background-repeat: no-repeat;
+
+      }
+  </style>
+<body>
+    <div class="container">
+    <section>
+        <form action="">
+            <h1>PIX@GR@M</h1>
+            <div>
+                <input type="text" placeholder="Username" name="UserId *" id="user" />
+                 <label class="obinfo">* obligatory fields</label>
+            </div>
+            <div>
+                <input type="password" placeholder="Password" name="password" id="password" />
+                <label class="obinfo">* obligatory fields</label>
+                    
+            </div>
+            <div>
+                <input type="button" id="Signin" value="Sign In"/>
+            </div>
+        </form>
+
+
+</body>
+    
+
+</html>
